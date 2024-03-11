@@ -39,7 +39,7 @@ server <- function(input, output, session) {
   ## Inicializa as views ##
   #########################
   inicio$server("inicio")
-  # sobre$server("sobre")
+  sobre$server("sobre")
   # sociabilidade$server("sociabilidade")
   # equidade$server("equidade")
   # atividades$server("atividades")

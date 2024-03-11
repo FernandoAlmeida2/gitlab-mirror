@@ -72,12 +72,12 @@ ui <- dashboardPage(
         "Início",
         tabName = "inicio",
         icon = icon("home")
+      ),
+      menuItem(
+        "Sobre",
+        tabName = "sobre",
+        icon = icon("circle-info")
       )
-      # menuItem(
-      #   "Sobre",
-      #   tabName = "sobre",
-      #   icon = icon("circle-info")
-      # ),
       # menuItem(
       #   "Sociabilidade",
       #   tabName = "sociabilidade",
@@ -145,11 +145,11 @@ ui <- dashboardPage(
       tabItem(
         tabName = "inicio",
         inicio$ui("inicio")
+      ),
+      tabItem(
+        tabName = "sobre",
+        sobre$ui("sobre")
       )
-      # tabItem(
-      #   tabName = "sobre",
-      #   sobre$ui("sobre")
-      # ),
       # tabItem(
       #   tabName = "sociabilidade",
       #   sociabilidade$ui("sociabilidade")
@@ -200,23 +200,18 @@ ui <- dashboardPage(
     "Filtros"
   ),
   footer = dashboardFooter(
-    # fixed = FALSE,
-    # left = tagList(
-    #   # Versão mobile
-    #   div(
-    #     style="background-color: #D1464B;",
-    #     span(
-    #       "@Insper.",
-    #       format(Sys.Date(), "%Y, "),
-    #       a(
-    #         href = "https://arqfuturo.com.br/post/laboratorio-arq.futuro-de-cidades-do-insper/",
-    #         target = "_blank",
-    #         "Laboratório Arq. Futuro de Cidades"
-    #       ),
-    #       "Núcleo de Arquitetura e Cidade"
-    #     )
-    #   )
-    # )
+    left = tagList(
+      # Versão mobile
+      div(
+        class = "bg-primary w-100 d-flex justify-content-center align-items-center",
+        style="background-color: #D1464B; height: 5vw; color: white;",
+        p(
+          "@Insper.",
+          format(Sys.Date(), "%Y, "),
+          "Laboratório Arq. Futuro de Cidades - Núcleo de Arquitetura e Cidade"
+        )
+      )
+    )
     #,
     # right = tagList(
     #   tags$ul(

@@ -27,7 +27,7 @@ success <- "#C2D12F"# NULL
 info <- blue2
 warning <- orange1
 danger <- "#A50104"# red
-light <- NULL
+light <- "#CCCCCC"
 dark <- NULL
 
 #################

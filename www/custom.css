@@ -133,11 +133,19 @@ h3{
 }
 
 .logo_maisfort {
-  width: 25vw;
+  width: 50vw;
+}
+
+.logo_header {
+  height: 5vw;
 }
 
 .imglink img {
   width: 22vw;
+}
+
+.nav-bar-right {
+  display: none;
 }
 
 .maps-container {

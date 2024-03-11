@@ -10,7 +10,7 @@ ui <- function(id) {
   tagList(
     fluidPage(
       fluidRow(
-        class = "image-container d-flex justify-content-center align-items-center", # Adicionada a classe image-container e outras classes de utilidade do Bootstrap
+        class = "image-container bg-light d-flex justify-content-center align-items-center", # Adicionada a classe image-container e outras classes de utilidade do Bootstrap
         div(
           #class = "text-center mb-5 mt-3", # Classe text-center para centralizar a imagem e mb-3 para dar uma margem abaixo da imagem
           img(class = "img-fluid logo_maisfort", src="home.png")

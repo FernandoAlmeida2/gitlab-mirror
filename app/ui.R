@@ -3,7 +3,7 @@ box::use(
   bs4Dash[...],
   echarts4r[e_theme_register],
   waiter[...],
-  fresh[use_theme, use_googlefont]
+  fresh[use_theme, use_googlefont,create_theme,bs4dash_sidebar_light, adminlte_color]
 )
 
 box::use(
@@ -33,7 +33,6 @@ box::use(
 
 #' @export
 ui <- dashboardPage(
-  skin = "#D1464B",
   dark = FALSE,
   help = FALSE,
   fullscreen = TRUE,
@@ -46,37 +45,34 @@ ui <- dashboardPage(
       image = "logo.png",
       opacity = 1.0
     ),
-    fixed = FALSE,
     tagList(
-      # Versão mobile
-      div(
-        class = "d-flex justify-content-center align-items-center bg-primary",
+      div(class = "bg-primary w-100 d-flex justify-content-center",
         a(
           class = "logo_header",
           href = "https://arqfuturo.com.br/post/laboratorio-arq.futuro-de-cidades-do-insper/",
           target = "_blank",
-          img(class = "img-fluid",
+          img(class = "img-fluid logo_header",
               src = "header.png")
         )
       )
     )
   ),
   sidebar = dashboardSidebar(
-    # fixed = TRUE,
-    # skin = "light",
-    # status = "primary",
-    # id = "sidebar",
-    # collapsed = TRUE,
-    # sidebarMenu(
-    #   id = "current_tab",
-    #   flat = FALSE,
-    #   compact = FALSE,
-    #   childIndent = TRUE,
-    #   menuItem(
-    #     "Início",
-    #     tabName = "inicio",
-    #     icon = icon("home")
-      # ),
+    fixed = TRUE,
+    skin = "light",
+    status = "primary",
+    id = "sidebar",
+    collapsed = TRUE,
+    sidebarMenu(
+      id = "current_tab",
+      flat = FALSE,
+      compact = FALSE,
+      childIndent = TRUE,
+      menuItem(
+        "Início",
+        tabName = "inicio",
+        icon = icon("home")
+      )
       # menuItem(
       #   "Sobre",
       #   tabName = "sobre",
@@ -132,24 +128,24 @@ ui <- dashboardPage(
       #   tabName = "equipe_pesquisa",
       #   icon = icon("people-group")
       # )
-    #)
+    )
   ),
   body = dashboardBody(
-    # use_googlefont(font1),
-    # use_googlefont(font2),
-    # use_googlefont(font3),
-    # use_theme(diobs_theme),
-    # e_theme_register(
-    #   paste(readLines("www/atlas_capital_humano.json"), collapse = ""),
-    #   "diobs"),
-    # tags$head(
-    #   tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
-    # ),
-    # tabItems(
-    #   tabItem(
-    #     tabName = "inicio",
-    #     inicio$ui("inicio")
-    #   ),
+    use_googlefont(font1),
+    use_googlefont(font2),
+    use_googlefont(font3),
+    use_theme(diobs_theme),
+    e_theme_register(
+      paste(readLines("www/atlas_capital_humano.json"), collapse = ""),
+      "diobs"),
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+    ),
+    tabItems(
+      tabItem(
+        tabName = "inicio",
+        inicio$ui("inicio")
+      )
       # tabItem(
       #   tabName = "sobre",
       #   sobre$ui("sobre")
@@ -194,7 +190,7 @@ ui <- dashboardPage(
       #   tabName = "equipe_pesquisa",
       #   equipe_pesquisa$ui("equipe_pesquisa")
       # )
-    #)
+    )
   ),
   controlbar = dashboardControlbar(
     id = "controlbar",

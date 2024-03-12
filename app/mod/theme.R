@@ -10,7 +10,7 @@ box::use(
     cyan
   ],
   ./paleta_atlas_economia[
-    blue2,
+    blue1,
     orange1,
     orange2,
     violet2
@@ -24,7 +24,7 @@ box::use(
 primary <- "#D1464B"
 secondary <- "#34AF63" # violet2
 success <- "#C2D12F"# NULL
-info <- blue2
+info <- blue1
 warning <- orange1
 danger <- "#A50104"# red
 light <- "#CCCCCC"

@@ -120,7 +120,7 @@ h5{
 }
 
 p {
-  font-size: 1vw;
+  font-size: 1.1vw;
   font-weight: 400;
 }
 
@@ -138,11 +138,19 @@ h3{
 }
 
 .logo_maisfort {
-  width: 50vw;
+  width: 55vw;
 }
 
 .logo_header {
-  height: 5vw;
+  height: 3.5vw;
+}
+
+.logo_sobre {
+  width: 20vw;
+}
+
+.info_filosofia {
+  width: 60vw;
 }
 
 .imglink img {
@@ -287,5 +295,3 @@ h3{
   }
   
 }
-
-

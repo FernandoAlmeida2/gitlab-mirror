@@ -33,8 +33,8 @@ box::use(
 
 #' @export
 ui <- dashboardPage(
-  dark = FALSE,
-  help = FALSE,
+  dark = NULL,
+  help = NULL,
   fullscreen = TRUE,
   scrollToTop = TRUE,
   header = dashboardHeader(
@@ -192,18 +192,11 @@ ui <- dashboardPage(
       # )
     )
   ),
-  controlbar = dashboardControlbar(
-    id = "controlbar",
-    skin = "light",
-    pinned = TRUE,
-    overlay = FALSE,
-    "Filtros"
-  ),
   footer = dashboardFooter(
     left = tagList(
       # Versão mobile
       div(
-        class = "bg-primary w-100 d-flex justify-content-center align-items-center",
+        class = "bg-primary w-100 d-flex justify-content-center align-items-center p-0",
         style="background-color: #D1464B; height: 5vw; color: white;",
         p(
           "@Insper.",

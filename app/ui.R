@@ -47,13 +47,13 @@ ui <- dashboardPage(
     ),
     tagList(
       div(class = "bg-primary w-100 d-flex justify-content-center",
-        a(
-          class = "logo_header",
-          href = "https://arqfuturo.com.br/post/laboratorio-arq.futuro-de-cidades-do-insper/",
-          target = "_blank",
-          img(class = "img-fluid logo_header",
-              src = "header.png")
-        )
+          a(
+            class = "logo_header",
+            href = "https://arqfuturo.com.br/post/laboratorio-arq.futuro-de-cidades-do-insper/",
+            target = "_blank",
+            img(class = "img-fluid logo_header",
+                src = "header.png")
+          )
       )
     )
   ),
@@ -77,7 +77,7 @@ ui <- dashboardPage(
         "Sobre",
         tabName = "sobre",
         icon = icon("circle-info")
-      )
+      ),
       # menuItem(
       #   "Sociabilidade",
       #   tabName = "sociabilidade",
@@ -123,11 +123,11 @@ ui <- dashboardPage(
       #   tabName = "piloto",
       #   icon = icon("chair")
       # ),
-      # menuItem(
-      #   "Equipe de pesquisa",
-      #   tabName = "equipe_pesquisa",
-      #   icon = icon("people-group")
-      # )
+      menuItem(
+        "Equipe de pesquisa",
+        tabName = "equipe_pesquisa",
+        icon = icon("people-group")
+      )
     )
   ),
   body = dashboardBody(
@@ -149,7 +149,7 @@ ui <- dashboardPage(
       tabItem(
         tabName = "sobre",
         sobre$ui("sobre")
-      )
+      ),
       # tabItem(
       #   tabName = "sociabilidade",
       #   sociabilidade$ui("sociabilidade")
@@ -186,10 +186,10 @@ ui <- dashboardPage(
       #   tabName = "piloto",
       #   piloto$ui("piloto")
       # ),
-      # tabItem(
-      #   tabName = "equipe_pesquisa",
-      #   equipe_pesquisa$ui("equipe_pesquisa")
-      # )
+      tabItem(
+        tabName = "equipe_pesquisa",
+        equipe_pesquisa$ui("equipe_pesquisa")
+      )
     )
   ),
   footer = dashboardFooter(
@@ -222,6 +222,6 @@ ui <- dashboardPage(
     #     ),
     #   )
     # )
-    )
+  )
   # title = "Observatório de Resíduos de Fortaleza"
 )

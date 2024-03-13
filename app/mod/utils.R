@@ -19,6 +19,21 @@ perc_format <- function(perc) {
 }
 
 #' @export
+week_format <- function(number) {
+  
+  switch (number,
+          "1" = "Segunda-feira",
+          "2" = "Terça-feira",
+          "3" = "Quarta-feira",
+          "4" = "Quinta-feira",
+          "5" = "Sexta-feira",
+          "6" = "Sábado",
+          "7" = "Domingo"
+  )
+  
+}
+
+#' @export
 trata_string <- function (word) {
   gsub(" ","", gsub("á","a",
                     gsub("é","e",

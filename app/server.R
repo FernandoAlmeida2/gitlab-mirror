@@ -47,6 +47,6 @@ server <- function(input, output, session) {
   # habitabilidade$server("habitabilidade")
   # contexto_urbano$server("contexto_urbano")
   # acesso_cultura$server("acesso_cultura")
-  # geo_data$server("geo_data")
-  # equipe_pesquisa$server("equipe_pesquisa")
+  #geo_data$server("geo_data")
+  equipe_pesquisa$server("equipe_pesquisa")
 }

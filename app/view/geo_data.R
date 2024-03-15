@@ -1,10 +1,5 @@
 box::use(leaflet[...],
-         stringr,
-         tidyverse[...],
-         geobr[...],
          shiny[...],
-         echarts4r[...],
-         purrr[...],
          bs4Dash,
          dplyr[
            count,
@@ -15,20 +10,19 @@ box::use(leaflet[...],
            rename,
            select
          ],
-         tidyr[drop_na],
-         readxl[...], writexl[...],readr[...],
-         shinyWidgets[...],
+         tidyr[pivot_longer],
          ../mod/utils[trata_string]
 )
 
-for (i in setores_bugs) {
-  setor_bug <- setores_shapes[setores_shapes$NOME %in% i,]
-  setores_shapes[setores_shapes$NOME %in% i,]$geometry <- sf::st_convex_hull(setor_bug$geometry)
-}
-
-locais <- utils::read.csv("data/locais.csv")
+dias_da_semana <- c("Segunda-feira", "Terça-feira", "Sábado", "Domingo")
+lista_locais <- utils::read.csv("data/locais.csv")
 regioes_masp <- utils::read.csv("data/regioes_masp.csv")
-#bairros <- c("Todos", sort(unique(bairros_shapes$Nome)))
+colnames(regioes_masp) = c("local", "10h", "11h", "12h", "13h", "16h", "17h", "18h", "19h", "dia_da_semana")
+
+dplyr::mutate(regioes_masp,
+              x = lista_locais[lista_locais["local"] == local][2],
+              y = lista_locais[lista_locais["local"] == local][3])
+bairros <- c("Todos", sort(unique(bairros_shapes$Nome)))
 
 ################################################
 ###interface e filtros de entrada
@@ -52,22 +46,25 @@ ui <- function(id) {
             img(class = "position-absolute z-index-1 top-0 left-0", src="geo_data.png",
                 width="30%")
           ),
-          h4("Encontre aqui as informações sobre os dias e turno da coleta domiciliar em seu bairro!",
-             class="title-option text-start position-relative z-index-2 font-weight-bold"
-          ),
+          h4("Visão espacial: Regiões Masp"),
           div(
             class = "filter-box",
-            h5(class="subtitle-option", "Selecione o seu"),
             selectInput(
-              inputId = ns("bairro"),
-              label = h5("BAIRRO", class = "font-weight-bold"),
-              choices = bairros,
+              inputId = ns("dia_semana"),
+              label = h5("Dia da semana", class = "font-weight-bold"),
+              choices = dias_da_semana,
+              width = "100%"
+            ),
+            selectInput(
+              inputId = ns("hora"),
+              label = h5("Hora", class = "font-weight-bold"),
+              choices = c("10h", "11h", "12h", "13h", "16h", "17h", "18h", "19h"),
               width = "100%"
             )
           )
         ),
         div(
-          leafletOutput(ns("coleta_plot"), height = "95%"),
+          leafletOutput(ns("regioes_plot"), height = "95%"),
           class = "maps-plot plot"
         )
       )
@@ -83,75 +80,32 @@ server <- function(id) {
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    
-    #granja_portugal_I <- setores_shapes[setores_shapes$NOME == "203192 - SER V - GRANJA PORTUGAL I", ]
-    
-    polygonColors <- list(DIURNO = "#d87a00", NOTURNO = "#255B54", INTEGRAL = "#A50104")
-    
-    bairros_bug <- dplyr::filter(bairros_shapes, Nome %in% c("Alvaro Weyne",
-                                                             "Bairro Ellery",
-                                                             "Bom Jardim",
-                                                             "Carlito Pamplona",
-                                                             "Granja Lisboa",
-                                                             "Granja Portugal",
-                                                             "Jacarecanga",
-                                                             "Monte Castelo",
-                                                             "Presidente Kennedy",
-                                                             "São Gerardo"))
-    
-    output$coleta_plot <- renderLeaflet({
-      req(input$bairro)
-      
-      # setores_shapes <- dplyr::mutate(setores_shapes,
-      #                                     geometry = sf::st_convex_hull(geometry))
-      
-      
-      if(input$bairro == "Todos") {
-        leaflet(data = setores_shapes) |>
-          addTiles() |>
-          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Noturno", "Integral"),
-                    opacity = 1) |>
-          #addPolygons(data = bairros_bug, weight = 5, color = "#00ffd8", opacity = 0.5) |>
-          addPolygons(weight = 2, color = ~paste(polygonColors[Turno]), opacity = 1,
-                      popup = ~paste(
-                        paste('<b>', 'Nome:', '</b>', NOME),
-                        paste('<b>', 'Dias de coleta:', '</b>', Freq_semanal),
-                        paste('<b>',  'Turno:', '</b>', Turno),
-                        sep = '<br/>')) 
-      } else {
-        
-        sf::sf_use_s2(TRUE)
-        
-        bairro_choice_shape <- dplyr::filter(bairros_shapes, Nome == input$bairro)$geometry
-        
-        # shapeData <- dplyr::mutate(setores_shapes,
-        #                                    intersection = sf::st_intersection(geometry, bairro_choice_shape))
-        
-        intersect_column <- lapply(setores_shapes$geometry, function(setor) {
-          #return(sf::st_crosses(sf::st_boundary(bairro_choice_shape), sf::st_boundary(setor))[1] == 1)
-          return(sf::st_intersects(bairro_choice_shape, setor)[1] == 1)
-        })
-        
-        setores_shapes$is_intersect <- intersect_column
-        intersect_setores <- dplyr::filter(setores_shapes, is_intersect == TRUE)
-        
-        intersect_setores <- dplyr::mutate(intersect_setores,
-                                           geometry = sf::st_intersection(geometry, bairro_choice_shape))
-        
-        leaflet(data = intersect_setores) |>
-          addTiles() |>
-          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Noturno", "Integral"),
-                    opacity = 1) |>
-          addPolygons(weight = 2, color = ~paste(polygonColors[Turno]), opacity = 1,
-                      popup = ~paste(
-                        paste('<b>', 'Nome:', '</b>', NOME),
-                        paste('<b>', 'Dias de coleta:', '</b>', Freq_semanal),
-                        paste('<b>',  'Turno:', '</b>', Turno),
-                        sep = '<br/>'))
-        
-      }
-      
+
+    output$regioes_plot <- renderLeaflet({
+      req(input$dia_semana)
+      req(input$hora)
+
+      filtered_points <- regioes_masp |>
+        dplyr::filter(dia_da_semana == week_format(input$dia_semana)) |>
+        dplyr::filter(hora == week_format(input$dia_semana))
+
+      leaflet(filtered_points) |>
+        addTiles() |>
+        addMarkers(lng=~x, lat=~y,
+                   clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T),
+                   popup = ~paste(
+                     paste('<b>', 'Nome:', '</b>', Nome),
+                     paste('<b>', 'Ponto de entrega:', '</b>', Ponto_de_Coleta),
+                     paste('<b>',  'Endereço:', '</b>', Endereco),
+                     paste('<b>',  'Bonificação:', '</b>', Bonificacao),
+                     paste('<b>',  'Horário de funcionamento:', '</b>', Horario_de_funcionamento),
+                     sprintf("<a href=https://www.google.com/maps/search/?api=1&query=%f,%f>
+                           <img src='google_maps_icon_2020.png' alt='Minha Figura'> </a>", y, x),
+                     sep = '<br/>'),
+                   popupOptions = popupOptions(closeButton = FALSE)) #|>
+      #addMeasure(localization = "pt_BR", primaryLengthUnit = "kilometers")
+
     })
-    
+
   })
 }

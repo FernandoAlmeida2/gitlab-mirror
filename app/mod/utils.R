@@ -19,16 +19,31 @@ perc_format <- function(perc) {
 }
 
 #' @export
-week_format <- function(number) {
+number_to_week <- function(number) {
   
-  switch (number,
-          "1" | 1 = "Segunda-feira",
-          "2" | 2 = "Terça-feira",
-          "3" | 3 = "Quarta-feira",
-          "4" | 4 = "Quinta-feira",
-          "5" | 5 = "Sexta-feira",
-          "6" | 6 = "Sábado",
-          "7" | 7 = "Domingo"
+  switch (as.character(number),
+          "1" = "Segunda-feira",
+          "2" = "Terça-feira",
+          "3" = "Quarta-feira",
+          "4" = "Quinta-feira",
+          "5" = "Sexta-feira",
+          "6" = "Sábado",
+          "7" = "Domingo"
+  )
+  
+}
+
+#' @export
+week_to_number <- function(week_day) {
+  
+  switch (week_day,
+          "Segunda-feira" = 1,
+          "Terça-feira" = 2,
+          "Quarta-feira" = 3,
+          "Quinta-feira" = 4,
+          "Sexta-feira" = 5,
+          "Sábado" = 6,
+          "Domingo" = 7
   )
   
 }

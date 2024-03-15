@@ -113,11 +113,11 @@ ui <- dashboardPage(
       #   tabName = "acesso_cultura",
       #   icon = icon("universal-access")
       # ),
-      # menuItem(
-      #   "GeoData",
-      #   tabName = "geo_data",
-      #   icon = icon("map-location-dot")
-      # ),
+      menuItem(
+        "GeoData",
+        tabName = "geo_data",
+        icon = icon("map-location-dot")
+      ),
       # menuItem(
       #   "Piloto",
       #   tabName = "piloto",
@@ -178,10 +178,10 @@ ui <- dashboardPage(
       #   tabName = "acesso_cultura",
       #   acesso_cultura$ui("acesso_cultura")
       # ),
-      # tabItem(
-      #   tabName = "geo_data",
-      #   geo_data$ui("geo_data")
-      # ),
+      tabItem(
+        tabName = "geo_data",
+        geo_data$ui("geo_data")
+      ),
       # tabItem(
       #   tabName = "piloto",
       #   piloto$ui("piloto")

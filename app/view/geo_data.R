@@ -11,18 +11,27 @@ box::use(leaflet[...],
            select
          ],
          tidyr[pivot_longer],
-         ../mod/utils[trata_string]
+         ../mod/utils[trata_string, week_to_number, number_to_week]
 )
 
 dias_da_semana <- c("Segunda-feira", "Terça-feira", "Sábado", "Domingo")
 lista_locais <- utils::read.csv("data/locais.csv")
 regioes_masp <- utils::read.csv("data/regioes_masp.csv")
-colnames(regioes_masp) = c("local", "10h", "11h", "12h", "13h", "16h", "17h", "18h", "19h", "dia_da_semana")
+colnames(regioes_masp) = c("Local", "10h", "11h", "12h", "13h", "16h", "17h", "18h", "19h", "dia_da_semana")
+regioes_masp <- regioes_masp |>
+  tidyr::pivot_longer(cols = c("10h", "11h", "12h", "13h", "16h", "17h", "18h", "19h"),
+                      names_to = "hora", values_to = "n_pessoas")
+regioes_masp <- dplyr::left_join(regioes_masp, lista_locais)
 
-dplyr::mutate(regioes_masp,
-              x = lista_locais[lista_locais["local"] == local][2],
-              y = lista_locais[lista_locais["local"] == local][3])
-bairros <- c("Todos", sort(unique(bairros_shapes$Nome)))
+regioes_masp <- regioes_masp |>
+  dplyr::mutate(Latitude = gsub(",", ".", Latitude), Longitude = gsub(",", ".", Longitude))
+
+# dplyr::mutate(regioes_masp,
+#               x = lista_locais[lista_locais["local"] == local][2],
+#               y = lista_locais[lista_locais["local"] == local][3])
+#bairros <- c("Todos", sort(unique(bairros_shapes$Nome)))
+
+
 
 ################################################
 ###interface e filtros de entrada
@@ -41,11 +50,11 @@ ui <- function(id) {
         class = "coleta-container maps-service d-flex justify-content-between",
         div(
           class = "maps-filter text-primary d-flex align-items-center flex-column",
-          div(
-            class = "position-relative w-100 logo-wave",
-            img(class = "position-absolute z-index-1 top-0 left-0", src="geo_data.png",
-                width="30%")
-          ),
+          # div(
+          #   class = "position-relative w-100 logo-wave",
+          #   img(class = "position-absolute z-index-1 top-0 left-0", src="geo_data.png",
+          #       width="30%")
+          # ),
           h4("Visão espacial: Regiões Masp"),
           div(
             class = "filter-box",
@@ -86,26 +95,23 @@ server <- function(id) {
       req(input$hora)
 
       filtered_points <- regioes_masp |>
-        dplyr::filter(dia_da_semana == week_format(input$dia_semana)) |>
-        dplyr::filter(hora == week_format(input$dia_semana))
+        dplyr::filter(dia_da_semana == week_to_number(input$dia_semana)) |>
+        dplyr::filter(hora == input$hora)
 
       leaflet(filtered_points) |>
         addTiles() |>
-        addMarkers(lng=~x, lat=~y,
+        addCircleMarkers(lng=~Longitude, lat=~Latitude, radius = sqrt(~n_pessoas),
                    clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T),
                    popup = ~paste(
-                     paste('<b>', 'Nome:', '</b>', Nome),
-                     paste('<b>', 'Ponto de entrega:', '</b>', Ponto_de_Coleta),
-                     paste('<b>',  'Endereço:', '</b>', Endereco),
-                     paste('<b>',  'Bonificação:', '</b>', Bonificacao),
-                     paste('<b>',  'Horário de funcionamento:', '</b>', Horario_de_funcionamento),
+                     paste('<b>', 'Local:', '</b>', Local),
+                     paste('<b>', 'Dia da semana:', '</b>', number_to_week(dia_da_semana)),
+                     paste('<b>',  'Hora:', '</b>', hora),
+                     paste('<b>',  'Número de pessoas:', '</b>', n_pessoas),
                      sprintf("<a href=https://www.google.com/maps/search/?api=1&query=%f,%f>
-                           <img src='google_maps_icon_2020.png' alt='Minha Figura'> </a>", y, x),
+                           <img src='google_maps_icon_2020.png' alt='Minha Figura'> </a>", Latitude, Longitude),
                      sep = '<br/>'),
                    popupOptions = popupOptions(closeButton = FALSE)) #|>
       #addMeasure(localization = "pt_BR", primaryLengthUnit = "kilometers")
-
     })
-
   })
 }

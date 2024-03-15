@@ -24,7 +24,9 @@ regioes_masp <- regioes_masp |>
 regioes_masp <- dplyr::left_join(regioes_masp, lista_locais)
 
 regioes_masp <- regioes_masp |>
-  dplyr::mutate(Latitude = gsub(",", ".", Latitude), Longitude = gsub(",", ".", Longitude))
+  dplyr::mutate(Latitude = as.double(gsub(",", ".", Latitude)),
+                Longitude = as.double(gsub(",", ".", Longitude)),
+                radius = sqrt(n_pessoas))
 
 # dplyr::mutate(regioes_masp,
 #               x = lista_locais[lista_locais["local"] == local][2],
@@ -96,20 +98,22 @@ server <- function(id) {
 
       filtered_points <- regioes_masp |>
         dplyr::filter(dia_da_semana == week_to_number(input$dia_semana)) |>
-        dplyr::filter(hora == input$hora)
+        dplyr::filter(hora == input$hora) |>
+        dplyr::group_by(Local, dia_da_semana, hora) |>
+        summarise(total_radius = sum(radius))
 
       leaflet(filtered_points) |>
         addTiles() |>
-        addCircleMarkers(lng=~Longitude, lat=~Latitude, radius = sqrt(~n_pessoas),
+        addCircleMarkers(lng=~Longitude, lat=~Latitude, radius = ~total_radius,
                    clusterOptions = markerClusterOptions(zoomToBoundsOnClick = T),
-                   popup = ~paste(
-                     paste('<b>', 'Local:', '</b>', Local),
-                     paste('<b>', 'Dia da semana:', '</b>', number_to_week(dia_da_semana)),
-                     paste('<b>',  'Hora:', '</b>', hora),
-                     paste('<b>',  'Número de pessoas:', '</b>', n_pessoas),
-                     sprintf("<a href=https://www.google.com/maps/search/?api=1&query=%f,%f>
-                           <img src='google_maps_icon_2020.png' alt='Minha Figura'> </a>", Latitude, Longitude),
-                     sep = '<br/>'),
+                   # popup = ~paste(
+                   #   paste('<b>', 'Local:', '</b>', Local),
+                   #   paste('<b>', 'Dia da semana:', '</b>', number_to_week(dia_da_semana)),
+                   #   paste('<b>',  'Hora:', '</b>', hora),
+                   #   paste('<b>',  'Número de pessoas:', '</b>', n_pessoas),
+                   #   sprintf("<a href=https://www.google.com/maps/search/?api=1&query=%f,%f>
+                   #         <img src='google_maps_icon_2020.png' alt='Minha Figura'> </a>", Latitude, Longitude),
+                   #   sep = '<br/>'),
                    popupOptions = popupOptions(closeButton = FALSE)) #|>
       #addMeasure(localization = "pt_BR", primaryLengthUnit = "kilometers")
     })

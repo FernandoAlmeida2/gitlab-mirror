@@ -47,13 +47,13 @@ ui <- dashboardPage(
     ),
     tagList(
       div(class = "bg-primary w-100 d-flex justify-content-center",
-          a(
-            class = "logo_header",
-            href = "https://arqfuturo.com.br/post/laboratorio-arq.futuro-de-cidades-do-insper/",
-            target = "_blank",
-            img(class = "img-fluid logo_header",
-                src = "header.png")
-          )
+        a(
+          class = "logo_header",
+          href = "https://arqfuturo.com.br/post/laboratorio-arq.futuro-de-cidades-do-insper/",
+          target = "_blank",
+          img(class = "img-fluid logo_header",
+              src = "header.png")
+        )
       )
     )
   ),
@@ -222,6 +222,6 @@ ui <- dashboardPage(
     #     ),
     #   )
     # )
-  )
+    )
   # title = "Observatório de Resíduos de Fortaleza"
 )

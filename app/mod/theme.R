@@ -23,11 +23,12 @@ box::use(
 #' @export
 primary <- "#D1464B"
 secondary <- "#34AF63" # violet2
-success <- "#C2D12F"# NULL
+success <- "#9CCCF9"# NULL
 info <- blue1
 warning <- orange1
 danger <- "#A50104"# red
-light <- "#CCCCCC"
+light <- NULL
+maroon <- "#F5ADA0"
 dark <- NULL
 
 #################
@@ -37,7 +38,7 @@ blue <- light_blue
 lightblue <- cyan
 navy <- NULL
 cyan <- NULL
-teal <- NULL
+teal <- "#BF7375"
 olive <- NULL
 green <- NULL #C2D12F
 lime <- NULL
@@ -45,11 +46,11 @@ orange <- NULL
 yellow <- NULL
 fuchsia <- NULL
 purple <- NULL
-maroon <- NULL
+#maroon <- NULL
 red <- red
 black <- NULL
 gray_x_light <- NULL
-gray_600 <- NULL
+gray_600 <- "#CCCCCC"
 gray_800 <- NULL
 gray_900 <- NULL
 white <- NULL

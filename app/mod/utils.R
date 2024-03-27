@@ -19,9 +19,9 @@ perc_format <- function(perc) {
 }
 
 #' @export
-number_to_week <- function(number) {
-  
-  switch (as.character(number),
+number_to_week <- function(number_list) {
+  lapply(number_list, function(x) {
+    switch (as.character(x),
           "1" = "Segunda-feira",
           "2" = "Terça-feira",
           "3" = "Quarta-feira",
@@ -29,7 +29,8 @@ number_to_week <- function(number) {
           "5" = "Sexta-feira",
           "6" = "Sábado",
           "7" = "Domingo"
-  )
+    )
+  })
   
 }
 
